@@ -133,7 +133,7 @@ func (m *Message) Parse() error {
 		for k, v := range decoded {
 			switch v.(type) {
 			case string:
-				m.Headers[k] = v.(string)
+				m.Headers[strings.ToLower(k)] = v.(string)
 			default:
 				//delete(m.Headers, k)
 				Warning("Removed non-string property (%s)", k)
