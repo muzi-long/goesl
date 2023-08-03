@@ -41,7 +41,7 @@ func (m *Message) GetCallUUID() string {
 
 // GetHeader - Will return message header value, or "" if the key is not set.
 func (m *Message) GetHeader(key string) string {
-	return m.Headers[key]
+	return m.Headers[strings.ToLower(key)]
 }
 
 // Parse - Will parse out message received from Freeswitch and basically build it accordingly for later use.
@@ -89,12 +89,12 @@ func (m *Message) Parse() error {
 	// Assing message headers IF message is not type of event-json
 	if msgType != "text/event-json" {
 		for k, v := range cmr {
-
-			m.Headers[k] = v[0]
+			k2 := strings.ToLower(k)
+			m.Headers[k2] = v[0]
 
 			// Will attempt to decode if % is discovered within the string itself
 			if strings.Contains(v[0], "%") {
-				m.Headers[k], err = url.QueryUnescape(v[0])
+				m.Headers[k2], err = url.QueryUnescape(v[0])
 
 				if err != nil {
 					Error(ECouldNotDecode, err)

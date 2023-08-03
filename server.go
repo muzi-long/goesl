@@ -21,7 +21,7 @@ type OutboundServer struct {
 	Addr  string `json:"address"`
 	Proto string
 
-	Conns chan SocketConnection
+	Conns chan *SocketConnection
 }
 
 // Start - Will start new outbound server
@@ -51,7 +51,7 @@ func (s *OutboundServer) Start() error {
 				break
 			}
 
-			conn := SocketConnection{
+			conn := &SocketConnection{
 				Conn: c,
 				err:  make(chan error),
 				m:    make(chan *Message),
@@ -92,7 +92,7 @@ func NewOutboundServer(addr string) (*OutboundServer, error) {
 	server := OutboundServer{
 		Addr:  addr,
 		Proto: "tcp",
-		Conns: make(chan SocketConnection),
+		Conns: make(chan *SocketConnection),
 	}
 
 	sig := make(chan os.Signal, 1)
